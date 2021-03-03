@@ -4,6 +4,12 @@
 // Create an event listener so that when the delete link is clicked, the removeItemFromCart method is invoked.
 const table = document.getElementById('cart');
 table.addEventListener('click', removeItemFromCart);
+
+let tbodyEl = document.getElementsByTagName('tbody');
+let trHeadElementArr = document.getElementsByTagName('tr');
+let trHeadElement = trHeadElementArr[0];
+
+
 let cart;
 
 function loadCart() {
@@ -20,7 +26,7 @@ function renderCart() {
 
 // TODO: Remove all of the rows (tr) in the cart table (tbody)
 function clearCart() {
-  document.querySelector("tbody").remove();
+  tbodyEl.innerHTML = '';
 }
 
 // TODO: Fill in the <tr>'s under the <tbody> for each item in the cart
@@ -36,16 +42,23 @@ function showCart() {
 
 
 
-  const tabelElement = document.getElementById("cart");
+  //const tabelElement = document.getElementById("cart");
 
-  for (let i=0; i<cart.items.length ; i++) {
+
+  let thImage = document.createElement('th');
+  trHeadElement.appendChild(thImage);
+  thImage.textContent = 'Image';
+
+  let image;
+
+  for (let i = 0; i < cart.items.length; i++) {
+
     let tr1 = document.createElement('tr');
-    tabelElement.appendChild(tr1);
+    //tabelElement.appendChild(tr1);
 
     let deletedTd = document.createElement('td');
     tr1.appendChild(deletedTd);
     deletedTd.textContent = 'X';
-    deletedTd.onclick= 'removeItemFromCart(event)';
 
     let tdQuantity = document.createElement('td');
     tr1.appendChild(tdQuantity);
@@ -55,31 +68,48 @@ function showCart() {
     tr1.appendChild(tdProduct);
     tdProduct.textContent = cart.items[i].product;
 
+    let tdImage = document.createElement('td');
+    tr1.appendChild(tdImage);
 
+
+    let imageEl = document.createElement('img');
+    tdImage.appendChild(imageEl);
+
+
+
+    image = cart.items[i].product;
+
+    for (let y = 0; y < Product.allProducts.length; y++) {
+
+      if (image === Product.allProducts[y].name) {
+        imageEl.src = Product.allProducts[y].filePath;
+        imageEl.style.width = '40px';
+
+      }
+    }
+
+    tbodyEl[0].appendChild(tr1);
   }
 
-  }
+  table.appendChild(tbodyEl[0]);
 
 
-
-
+}
 
 
 
 function removeItemFromCart(event) {
-  
+
 
   // TODO: When a delete link is clicked, use cart.removeItem to remove the correct item
-  
+
   // let i = event.target.parentNode.rowIndex;
   // document.getElementById('cart').deleteRow(i);
-  
+
   // TODO: Save the cart back to local storage
   cart.saveToLocalStorage();
   // TODO: Re-draw the cart table
-  renderCart();
-
-
+  
 }
 
 // This will initialize the page and draw the cart on screen
